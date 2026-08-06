@@ -1,0 +1,26 @@
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-muted);
+  border-radius: var(--radius-full);
+  padding: 6px 12px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 200ms ease;
+  backdrop-filter: blur(4px);
+}
+
+.toggleBtn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.label {
+  letter-spacing: 0.5px;
+}

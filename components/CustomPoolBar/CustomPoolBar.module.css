@@ -1,0 +1,163 @@
+/* ─── Inactive state (picker trigger) ─────────────────────────── */
+.inactiveRow {
+  display: flex;
+  justify-content: center;
+}
+
+.pickBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-bright);
+  color: var(--color-muted-light);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-display);
+  transition: all var(--transition-fast);
+}
+
+.pickBtn:hover {
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+  background: var(--color-surface-hover);
+  box-shadow: 0 0 12px rgba(255,128,0,0.15);
+}
+
+.pickCount {
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255,128,0,0.15);
+  color: var(--color-orange);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* ─── Active pool bar ─────────────────────────────────────────── */
+.poolBar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,128,0,0.06);
+  border: 1px solid rgba(255,128,0,0.25);
+  animation: fadeIn 200ms ease;
+}
+
+.poolHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.poolBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-orange);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: 0.3px;
+}
+
+.poolCount {
+  font-size: 13px;
+  color: var(--color-muted-light);
+  font-weight: 500;
+}
+
+.poolActions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted-light);
+  font-size: 12px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.actionBtn:hover {
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+}
+
+.exitBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.exitBtn:hover {
+  border-color: var(--color-border-bright);
+  color: var(--color-white);
+}
+
+.poolHint {
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+/* ─── Chips ───────────────────────────────────────────────────── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-bright);
+  color: var(--color-muted-light);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.chipRemove {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.chipRemove:hover {
+  background: var(--color-orange);
+  color: #fff;
+}

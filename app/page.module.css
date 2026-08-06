@@ -1,142 +1,304 @@
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
+  min-height: 100vh;
   display: flex;
-  flex: 1;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  position: relative;
+  padding: 40px 24px;
+  overflow: hidden;
 }
 
-.main {
+.topBar {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 10;
+}
+
+/* ─── Background particles / grid ───────────────────────────── */
+.bgGrid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 128, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 128, 0, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bgGlow {
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 128, 0, 0.07) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Content ────────────────────────────────────────────────── */
+.content {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
+  align-items: center;
+  gap: 48px;
+  width: 100%;
+  max-width: 520px;
+  animation: fadeIn 600ms ease both;
 }
 
-.intro {
+/* ─── Logo / Header ──────────────────────────────────────────── */
+.logoArea {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
+  align-items: center;
   gap: 16px;
-  font-size: 14px;
+  text-align: center;
 }
 
-.ctas a {
+.logoIcon {
+  width: 72px;
+  height: 72px;
+  position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
+  justify-content: center;
+}
+
+.logoCircle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 3px solid var(--color-orange);
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-orange);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.logoPointer {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 14px solid var(--color-orange);
+  filter: drop-shadow(0 0 6px var(--color-orange));
+}
+
+.logoSvg {
+  width: 28px;
+  height: 28px;
+  color: var(--color-orange);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.titleAccent {
+  color: var(--color-orange);
+}
+
+.subtitle {
+  font-size: 17px;
+  color: var(--color-muted-light);
+  max-width: 380px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ─── Floating posters decoration ────────────────────────────── */
+.floatingPosters {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floatingPoster {
+  position: absolute;
+  width: 80px;
+  border-radius: var(--radius-sm);
+  opacity: 0.06;
+  background: var(--color-surface-alt);
+}
+
+/* ─── Quick access card ──────────────────────────────────────── */
+.quickAccess {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: fadeIn 400ms ease both;
+}
+
+.quickAccessInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-bright);
+  transition: border-color var(--transition-fast);
+}
+
+.quickAccessInner:hover {
+  border-color: var(--color-orange-dim);
+}
+
+.quickAccessInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.quickAccessLabel {
+  font-size: 12px;
+  color: var(--color-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quickAccessUser {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.quickAccessBtn {
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-orange) 0%, #FF6600 100%);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  transition: all var(--transition-med);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.quickAccessBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-orange-sm);
+}
+
+.quickAccessBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.quickAccessSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.quickAccessDivider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0 4px;
+}
+
+.quickAccessDivider::before,
+.quickAccessDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.quickAccessDivider span {
+  font-size: 13px;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+/* ─── Feature pills ──────────────────────────────────────────── */
+.features {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.featurePill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  font-size: 13px;
+  color: var(--color-muted-light);
   font-weight: 500;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.featurePill span:first-child {
+  font-size: 15px;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+/* ─── Note ───────────────────────────────────────────────────── */
+.note {
+  font-size: 13px;
+  color: var(--color-muted);
+  text-align: center;
+  padding: 0 12px;
+  line-height: 1.6;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
+.noteLink {
+  color: var(--color-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
+/* ─── Footer ─────────────────────────────────────────────────── */
+.footer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: var(--color-muted);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
-  }
+.footerHeart {
+  color: #e25555;
 }

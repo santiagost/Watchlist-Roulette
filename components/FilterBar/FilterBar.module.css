@@ -1,0 +1,160 @@
+.filterBar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+}
+
+.filterBar.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.filterHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filterTitle {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted-light);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.clearBtn {
+  font-size: 13px;
+  color: var(--color-orange);
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-orange);
+  transition: all var(--transition-fast);
+}
+
+.clearBtn:hover {
+  background: var(--color-orange);
+  color: #fff;
+}
+
+/* ─── Genre chips ────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionLabel {
+  font-size: 13px;
+  color: var(--color-muted);
+  font-weight: 500;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ─── Sliders / selects ──────────────────────────────────────── */
+.sliderRow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sliderLabel {
+  font-size: 13px;
+  color: var(--color-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sliderValue {
+  color: var(--color-orange);
+  font-weight: 600;
+}
+
+.slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--color-orange) 0%,
+    var(--color-orange) var(--value, 0%),
+    var(--color-border-bright) var(--value, 0%),
+    var(--color-border-bright) 100%
+  );
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-orange);
+  box-shadow: 0 0 8px rgba(255,128,0,0.5);
+  cursor: pointer;
+  border: 2px solid #fff;
+  transition: transform var(--transition-fast);
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-orange);
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+
+/* ─── Decade buttons ─────────────────────────────────────────── */
+.decadeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.decadeBtn {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--color-surface-alt);
+  color: var(--color-muted-light);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.decadeBtn:hover {
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+}
+
+.decadeBtn.active {
+  background: var(--color-orange);
+  color: #fff;
+  border-color: var(--color-orange);
+}

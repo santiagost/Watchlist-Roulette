@@ -1,0 +1,185 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.inputGroup {
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.inputGroup:focus-within {
+  border-color: var(--color-orange);
+  box-shadow: 0 0 0 4px var(--color-orange-glow);
+}
+
+.prefix {
+  padding: 0 16px;
+  color: var(--color-muted);
+  font-size: 15px;
+  white-space: nowrap;
+  font-family: var(--font-body);
+  user-select: none;
+  border-right: 1px solid var(--color-border);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background: var(--color-surface-alt);
+}
+
+.input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--color-white);
+  font-size: 16px;
+  font-family: var(--font-body);
+  padding: 16px 20px;
+  min-width: 0;
+}
+
+.input::placeholder {
+  color: var(--color-muted);
+}
+
+/* ─── Remember checkbox ──────────────────────────────────────── */
+.rememberLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 4px 0;
+  user-select: none;
+}
+
+.rememberCheckbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.rememberCheck {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid var(--color-border-bright);
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.rememberCheckbox:checked + .rememberCheck {
+  background: var(--color-orange);
+  border-color: var(--color-orange);
+}
+
+.rememberTick {
+  color: #fff;
+  width: 13px;
+  height: 13px;
+  stroke-width: 3;
+}
+
+.rememberText {
+  font-size: 14px;
+  color: var(--color-muted-light);
+  font-weight: 500;
+}
+
+.rememberHint {
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-left: auto;
+}
+
+.rememberLabel:hover .rememberCheck {
+  border-color: var(--color-orange);
+}
+
+/* ─── Submit button ──────────────────────────────────────────── */
+.submitBtn {
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--color-orange) 0%, #FF6600 100%);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: all var(--transition-med);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.submitBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.submitBtn:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-orange);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: rgba(220, 50, 50, 0.1);
+  border: 1px solid rgba(220, 50, 50, 0.3);
+  color: #FF6B6B;
+  font-size: 14px;
+  animation: fadeIn 200ms ease;
+}
+
+@media (max-width: 640px) {
+  .rememberHint {
+    display: none;
+  }
+}
