@@ -4,6 +4,12 @@ Este documento lleva un registro histórico de las funcionalidades, refactorizac
 
 ---
 
+## 🔒 Mejoras a futuro
+
+- **Rate limiting en `/api/watchlist`**: hoy el endpoint es un proxy abierto (cualquier persona con la URL puede scrapear watchlists de Letterboxd a través de la app). El cache del CDN (`s-maxage=300`) ya mitiga los requests repetidos, pero como mejora futura se podría agregar un limitador por IP (p. ej. Upstash Rate Limit, tier gratuito) para proteger las invocaciones del plan Hobby y evitar un bloqueo de Letterboxd.
+
+---
+
 ## [Unreleased] - 2026-08-01
 
 ### 🌐 Soporte Multilingüe (Español / Inglés - i18n)
@@ -42,6 +48,8 @@ Este documento lleva un registro histórico de las funcionalidades, refactorizac
 ### ⚙️ Configuración / Infraestructura
 - **Imágenes de TMDB (`next.config.ts`)**: Se configuró `images.remotePatterns` para permitir que `next/image` sirva posters y backdrops desde `image.tmdb.org`.
 - **Endpoints API (`app/api/`)**: Se crearon las rutas `/api/watchlist` (fetch y paginación de la watchlist) y `/api/debug-watchlist` (endpoint de depuración para inspeccionar la respuesta de Letterboxd durante el scraping).
+- **Proxy Server-Side de TMDB (`/api/enrich`)**: La API key de TMDB dejó de viajar en el bundle del navegador (`NEXT_PUBLIC_TMDB_API_KEY` → `TMDB_API_KEY` server-only). El enriquecimiento ahora se hace contra la ruta propia `/api/enrich`, que guarda la key en el servidor. Si la key no está configurada, el cliente aborta el enriquecimiento y mantiene las películas sin datos (misma UX que antes).
+- **README personalizado**: Documentación real del proyecto (features, stack, setup local, deploy en Vercel y estructura del repo). Se eliminaron archivos de trabajo (`watchlist.html`, `bash.exe.stackdump`, resumen de debugging).
 
 ---
 

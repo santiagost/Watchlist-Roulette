@@ -7,10 +7,9 @@ import {
   Search, Lock, Film, Zap, KeyRound, ShieldAlert,
   Disc3, User, RefreshCw, CircleCheck, HardDrive, ArrowLeft,
 } from 'lucide-react';
-import { EnrichedFilm, LetterboxdFilm, Filters, WatchlistResponse } from '@/lib/types';
+import { EnrichedFilm, LetterboxdFilm, Filters, WatchlistResponse, AppLanguage } from '@/lib/types';
 import { useLanguage } from '@/lib/i18n';
 import LanguageToggle from '@/components/LanguageToggle';
-import { enrichFilm } from '@/lib/tmdb';
 import {
   saveWatchlist,
   loadWatchlist,
@@ -28,8 +27,6 @@ import WatchlistGrid from '@/components/WatchlistGrid';
 import CustomPoolBar from '@/components/CustomPoolBar';
 import CustomWheelPicker from '@/components/CustomWheelPicker';
 import styles from './page.module.css';
-
-const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY ?? '';
 
 type PageState = 'loading' | 'enriching' | 'ready' | 'error';
 type SyncState = 'idle' | 'syncing' | 'done';
@@ -93,6 +90,33 @@ function applyFilters(films: EnrichedFilm[], filters: Filters): EnrichedFilm[] {
   });
 }
 
+// Server has no TMDB key configured — sentinel to abort the enrichment loop
+const NO_SERVER_KEY = Symbol('no-server-key');
+
+// Enriches a film through our own /api/enrich route so the TMDB key never
+// reaches the browser bundle.
+async function enrichViaApi(film: LetterboxdFilm, language: AppLanguage): Promise<EnrichedFilm> {
+  try {
+    const res = await fetch('/api/enrich', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ film, language }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      if (data?.errorCode === 'NO_API_KEY') throw NO_SERVER_KEY;
+      return { ...film, enriched: false };
+    }
+
+    const data = await res.json();
+    return (data?.enriched as EnrichedFilm | undefined) ?? { ...film, enriched: false };
+  } catch (e) {
+    if (e === NO_SERVER_KEY) throw e;
+    return { ...film, enriched: false };
+  }
+}
+
 export default function UsernamePage() {
   const params = useParams();
   const username = typeof params.username === 'string' ? decodeURIComponent(params.username) : '';
@@ -142,17 +166,21 @@ export default function UsernamePage() {
       rawFilms: LetterboxdFilm[],
       onBatchDone?: (done: number, total: number) => void
     ): Promise<EnrichedFilm[]> => {
-      if (!TMDB_API_KEY) {
-        return rawFilms.map((f) => ({ ...f, enriched: false }));
-      }
-
       const enriched: EnrichedFilm[] = [];
       const BATCH = 5;
 
       for (let i = 0; i < rawFilms.length; i += BATCH) {
         const batch = rawFilms.slice(i, i + BATCH);
-        const results = await Promise.all(batch.map((f) => enrichFilm(f, TMDB_API_KEY, language)));
-        enriched.push(...results);
+        try {
+          const results = await Promise.all(batch.map((f) => enrichViaApi(f, language)));
+          enriched.push(...results);
+        } catch {
+          // Server has no TMDB key — keep the remaining films unenriched
+          return [
+            ...enriched,
+            ...rawFilms.slice(enriched.length).map((f) => ({ ...f, enriched: false })),
+          ];
+        }
         onBatchDone?.(enriched.length, rawFilms.length);
 
         if (i + BATCH < rawFilms.length) {
@@ -268,20 +296,18 @@ export default function UsernamePage() {
     const initial: EnrichedFilm[] = rawFilms.map((f) => ({ ...f, enriched: false }));
     setAllFilms(initial);
 
-    if (!TMDB_API_KEY) {
-      saveWatchlist(username, initial, language);
-      setEnrichedCount(rawFilms.length);
-      setPageState('ready');
-      setIsBusy(false);
-      return;
-    }
-
     const enriched: EnrichedFilm[] = [...initial];
     const BATCH = 5;
 
     for (let i = 0; i < rawFilms.length; i += BATCH) {
       const batch = rawFilms.slice(i, i + BATCH);
-      const results = await Promise.all(batch.map((f) => enrichFilm(f, TMDB_API_KEY, language)));
+      let results: EnrichedFilm[];
+      try {
+        results = await Promise.all(batch.map((f) => enrichViaApi(f, language)));
+      } catch {
+        // Server has no TMDB key — keep the remaining films unenriched
+        break;
+      }
 
       results.forEach((enrichedFilm, j) => {
         enriched[i + j] = enrichedFilm;

@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎡 Watchlist Roulette
 
-## Getting Started
+Una ruleta para decidir qué ver: ingresá tu usuario de [Letterboxd](https://letterboxd.com) y girá la rueda para elegir tu próxima película entre tu watchlist.
 
-First, run the development server:
+## ✨ Funcionalidades
+
+- **Ruleta interactiva** con la paleta de colores de Letterboxd, textos radiales y aterrizaje exacto sobre la película ganadora.
+- **Filtros**: género, rating mínimo, duración máxima y década (los filtros se desactivan al usar la ruleta personalizada).
+- **Ruleta personalizada**: elegí a mano las películas que participan con un buscador, y la selección queda guardada por usuario.
+- **Títulos bilingües ES/EN**: cada película muestra su título en el idioma de la app, con el título alternativo como secundario en el modal (obtenidos de TMDB sin llamadas extra).
+- **Interfaz en Español e Inglés** con detección automática del idioma del navegador.
+- **Enriquecimiento con TMDB**: posters, sinopsis, géneros, rating, duración y directores, con caché local (indexed localStorage) y sync incremental.
+- **Errores claros**: usuario inexistente, watchlist privada, bloqueo de Cloudflare, etc.
+
+## 🛠 Stack
+
+- [Next.js 16](https://nextjs.org) (App Router) + React 19 + TypeScript
+- [Cheerio](https://cheerio.js.org) para el scraping de Letterboxd (server-side)
+- [TMDB API](https://www.themoviedb.org/settings/api) para el enriquecimiento de películas
+- [lucide-react](https://lucide.dev) para los íconos
+
+## 🚀 Setup local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Creá un archivo `.env.local` en la raíz con tu API key de TMDB (gratis en [themoviedb.org/settings/api](https://www.themoviedb.org/settings/api)):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+TMDB_API_KEY=tu_api_key_aca
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+La key se usa **solo server-side** (ruta `/api/enrich`) y nunca llega al navegador. Mirá `.env.local.example`.
 
-## Learn More
+## ☁️ Deploy en Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Importá el repo en [vercel.com/new](https://vercel.com/new).
+2. En **Project → Settings → Environment Variables**, agregá `TMDB_API_KEY` (Production, Preview y Development).
+3. Deploy automático con cada push a `main`/`master`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Estructura
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  page.tsx            # Landing: ingresar usuario
+  [username]/page.tsx # Ruleta, filtros, grilla y modal
+  api/
+    watchlist/        # Scraping de la watchlist de Letterboxd (server)
+    enrich/           # Proxy de TMDB (server, guarda la API key)
+components/           # Ruleta, filtros, grilla, modal, picker, i18n toggle...
+lib/                  # i18n, caché, scraping, TMDB, tipos
+```
 
-## Deploy on Vercel
+## 📝 Notas
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- El scraping respeta el flujo normal de Letterboxd; si aparece "Bloqueado por Cloudflare", reintentá en unos segundos.
+- El estado de cada usuario (ruleta personalizada) se guarda en el navegador, no en un backend.
